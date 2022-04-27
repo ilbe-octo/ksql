@@ -1,0 +1,16 @@
+server:
+  port: ${DATA_GENERATOR_PORT:9090}
+spring:
+  application:
+    name: data-generator
+  datasource:
+    platform: postgres
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/datagen}
+    username: ${DATASOURCE_USERNAME:dgen-user}
+    password: ${DATASOURCE_PASSWORD:dgen-pass}
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 20
+  jpa:
+    database: POSTGRESQL
+    hibernate.ddl-auto: ${DDL_STRATEGY:update}

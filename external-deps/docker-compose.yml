@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:alpine
+    container_name: db-server
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATASOURCE_URL: ${DATASOURCE_URL}
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    volumes:
+      - ./private/database/datadir:/var/lib/postgresql/data
+    networks:
+      - net
+  data-generator:
+    container_name: data-generator
+    build:
+      context: ../data-generator
+      dockerfile: Dockerfile
+    image: data-generator:latest
+    environment:
+      DATASOURCE_URL: ${DATASOURCE_URL}
+      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
+      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
+      DDL_STRATEGY: ${DDL_STRATEGY}
+      DATA_GENERATOR_PORT: 9090
+    depends_on:
+      - db
+    ports:
+      - 9090:9090
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
