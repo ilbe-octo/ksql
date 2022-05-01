@@ -1,0 +1,23 @@
+{
+  "name": "dataConnector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "plugin.name": "pgoutput",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "dgen-user",
+    "database.password": "dgen-pass",
+    "database.dbname": "datagen",
+    "database.server.name": "postgres",
+    "table.include.list": "public.campaign,public.owner",
+    "database.history.kafka.bootstrap.servers": "kafka:9092",
+    "database.history.kafka.topic" : "dbhistory.datagen" ,
+    "transforms": "unwrap,extractkey",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.extractkey.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+    "transforms.extractkey.field": "id",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "io.confluent.connect.avro.AvroConverter",
+    "value.converter.schema.registry.url": "http://schema-registry:8081"
+  }
+}
