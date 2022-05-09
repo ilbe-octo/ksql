@@ -9,15 +9,16 @@
     "database.password": "dgen-pass",
     "database.dbname": "datagen",
     "database.server.name": "postgres",
-    "table.include.list": "public.campaign,public.owner",
+    "table.exclude.list": "public.media",
     "database.history.kafka.bootstrap.servers": "kafka:9092",
-    "database.history.kafka.topic" : "dbhistory.datagen" ,
+    "database.history.kafka.topic": "dbhistory.datagen",
     "transforms": "unwrap,extractkey",
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
     "transforms.extractkey.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
     "transforms.extractkey.field": "id",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
     "value.converter": "io.confluent.connect.avro.AvroConverter",
+    "slot.name": "data",
     "value.converter.schema.registry.url": "http://schema-registry:8081"
   }
 }

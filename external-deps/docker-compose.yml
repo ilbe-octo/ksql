@@ -16,7 +16,7 @@ services:
       - ./private/database/datadir:/var/lib/postgresql/data
 #      - ./private/database/config/:/etc/postgresql/pg_hba.conf
     networks:
-      - net
+      - ksql-net
 
   data-generator:
     container_name: data-generator
@@ -35,14 +35,14 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - net
+      - ksql-net
 
   zookeeper:
     image: confluentinc/cp-zookeeper:6.2.0
     container_name: zookeepere
     hostname: zookeepere
     networks:
-      - net
+      - ksql-net
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -52,7 +52,7 @@ services:
     container_name: kafka
     hostname: kafka
     networks:
-      - net
+      - ksql-net
     restart: always
     depends_on:
       - zookeeper
@@ -86,7 +86,7 @@ services:
     hostname: schema-registry
     restart: always
     networks:
-      - net
+      - ksql-net
     depends_on:
       - zookeeper
       - kafka
@@ -105,7 +105,7 @@ services:
     hostname: kafka-connect-01
     restart: always
     networks:
-      - net
+      - ksql-net
     depends_on:
       - kafka
       - schema-registry
@@ -147,7 +147,7 @@ services:
         echo "Launching Kafka Connect worker"
         /etc/confluent/docker/run & 
         #
-        echo "Waiting for Kafka Connect to start listening on localhost ⏳"
+        echo "Waiting for Kafka Connect to start listening on localhost ⏳" 
         while : ; do
           curl_status=$$(curl -s -o /dev/null -w %{http_code} http://kafka-connect-01:8083/connectors)
           echo -e $$(date) " Kafka Connect listener HTTP state: " $$curl_status " (waiting for 200)"
@@ -165,7 +165,7 @@ services:
     restart: always
     container_name: ksqldb
     networks:
-      - net
+      - ksql-net
     links:
       - schema-registry
       - kafka-connect-01
@@ -185,4 +185,4 @@ services:
       KSQL_KSQL_SERVICE_ID: confluent_rmoff_01
       KSQL_KSQL_HIDDEN_TOPICS: '^_.*'
 networks:
-  net:
+  ksql-net:
