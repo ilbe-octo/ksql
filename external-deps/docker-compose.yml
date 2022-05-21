@@ -80,6 +80,7 @@ services:
         sleep infinity
 
 
+
   schema-registry:
     image: confluentinc/cp-schema-registry:6.2.0
     container_name: schema-registry
@@ -159,6 +160,7 @@ services:
         sleep infinity
 
 
+
   ksqldb:
     image: confluentinc/ksqldb-server:0.25.1
     hostname: ksqldb
@@ -173,6 +175,8 @@ services:
     depends_on:
       - kafka
       - kafka-connect-01
+    volumes:
+      - ./private/migration/duyo-dash:/share/ksql-migrations
     ports:
       - "8088:8088"
     environment:
